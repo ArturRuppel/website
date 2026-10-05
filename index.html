@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Artur Ruppel</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,600;1,400&display=swap">
+<style>
+/* Layout: one quiet column of text, 720px wide, white ground. Navy for headings and links, teal only on hover and for the one "current" marker. */
+:root {
+  --bg: #ffffff; --fg: #24262b; --muted: #666a73; --line: #dfe1e5; --fill: #f1f2f4;
+  --navy: #1f3f7a; --teal: #0e7c7b;
+  --font: "Source Sans 3", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 64px; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body { background: var(--bg); color: var(--fg); font-family: var(--font); font-size: 18px; line-height: 1.6; }
+h1, h2, h3, p, ul, ol, dl, dd, figure { margin: 0; }
+ul, ol { padding: 0; list-style: none; }
+a { color: var(--navy); text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 3px; }
+a:hover { color: var(--teal); text-decoration-color: currentColor; }
+a:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+
+.wrap { max-width: 760px; margin-inline: auto; padding-inline: 20px; }
+
+/* top bar */
+.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); border-bottom: 1px solid var(--line); }
+.bar .wrap { display: flex; align-items: baseline; justify-content: space-between; gap: 24px; padding-block: 14px; }
+.bar .name { font-weight: 600; color: var(--fg); text-decoration: none; white-space: nowrap; }
+.bar nav { min-width: 0; overflow-x: auto; }
+.bar nav ul { display: flex; gap: 22px; }
+.bar nav a { font-size: 16px; color: var(--muted); text-decoration: none; white-space: nowrap; }
+.bar nav a:hover { color: var(--teal); }
+
+/* opening */
+.opening { display: grid; grid-template-columns: minmax(0, 1fr) 180px; gap: 40px; align-items: start; padding-block: 64px 56px; }
+.opening h1 { font-size: 34px; line-height: 1.2; font-weight: 600; color: var(--navy); }
+.opening .role { margin-top: 6px; color: var(--muted); }
+.opening .about { margin-top: 24px; display: flex; flex-direction: column; gap: 14px; }
+
+/* placeholders */
+.ph { background: var(--fill); display: flex; align-items: center; justify-content: center; padding: 16px; text-align: center; font-size: 14px; line-height: 1.4; color: var(--muted); max-width: 100%; }
+.ph.portrait { aspect-ratio: 4 / 5; }
+.ph.wide { aspect-ratio: 16 / 9; }
+figure img, figure video { display: block; width: 100%; height: auto; }
+figure .row { display: grid; grid-template-columns: 2fr 1fr; gap: 0; align-items: center; }
+img.portrait { display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; }
+.todo { color: var(--muted); font-style: italic; }
+figcaption { margin-top: 8px; font-size: 15px; color: var(--muted); }
+
+/* sections */
+section.block { padding-block: 44px 52px; border-top: 1px solid var(--line); }
+section.block > h2 { font-size: 24px; font-weight: 600; color: var(--navy); margin-bottom: 20px; }
+.stack { display: flex; flex-direction: column; gap: 36px; }
+.item h3 { font-size: 20px; line-height: 1.3; font-weight: 600; }
+.item .meta { font-size: 16px; color: var(--muted); margin-top: 2px; }
+.item p.text { margin-top: 10px; }
+.item .ref { margin-top: 10px; font-size: 16px; }
+.item figure { margin-top: 18px; }
+.current { color: var(--teal); }
+
+/* lists */
+.list > li { padding-block: 14px; border-top: 1px solid var(--line); }
+.list > li:first-child { border-top: 0; padding-top: 0; }
+.list .t { font-weight: 600; line-height: 1.4; }
+.list .s { font-size: 16px; color: var(--muted); margin-top: 3px; }
+.list .s b { color: var(--fg); font-weight: 600; }
+.rows > li { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 16px; padding-block: 12px; border-top: 1px solid var(--line); }
+.rows > li:first-child { border-top: 0; padding-top: 0; }
+.rows .y { color: var(--muted); font-variant-numeric: tabular-nums; }
+.sub { font-size: 18px; font-weight: 600; margin-block: 32px 12px; }
+.note { font-size: 16px; color: var(--muted); }
+
+/* private tools: logos only, name and description on click */
+.logos { display: flex; flex-wrap: wrap; gap: 8px 14px; margin-top: 20px; }
+.logos button { display: block; padding: 8px 6px 10px; background: none; border: 0; border-bottom: 2px solid transparent; cursor: pointer; opacity: 0.7; }
+.logos button:hover, .logos button[aria-pressed="true"] { opacity: 1; }
+.logos button[aria-pressed="true"] { border-bottom-color: var(--teal); }
+.logos button:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+.logos img { display: block; width: 56px; height: 56px; object-fit: contain; }
+.logo-panel { margin-top: 14px; min-height: 5.2em; }
+.logo-panel .t { font-weight: 600; }
+
+dl.contact { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 8px 16px; }
+dl.contact dt { color: var(--muted); }
+dl.contact dd { overflow-wrap: anywhere; }
+
+footer { border-top: 1px solid var(--line); padding-block: 20px 40px; font-size: 15px; color: var(--muted); }
+
+@media (max-width: 600px) {
+  body { font-size: 17px; }
+  .opening { grid-template-columns: minmax(0, 1fr); gap: 28px; padding-block: 40px; }
+  .opening img.portrait { width: 140px; order: -1; }
+  .bar .name { display: none; }
+  .rows > li, dl.contact { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+  dl.contact dd { margin-bottom: 10px; }
+}
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="wrap">
+    <a class="name" href="#top">Artur Ruppel</a>
+    <nav aria-label="Sections">
+      <ul>
+        <li><a href="#research">Research</a></li>
+        <li><a href="#publications">Publications</a></li>
+        <li><a href="#software">Software</a></li>
+        <li><a href="#cv">CV</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap" id="top">
+
+  <div class="opening">
+    <div>
+      <h1>Artur Ruppel</h1>
+      <p class="role">Experimental biophysicist<br>Institut Pasteur, Paris</p>
+      <div class="about">
+        <p>Living systems are organised in layers, from molecules to cells to tissues, and each layer has properties that its parts do not have on their own. I study the step from cells to tissues: how local interactions between neighbouring cells give rise to the collective behaviour of the tissue.</p>
+        <p>My approach is to reconstitute minimal tissues, from two cells to several thousand, in which forces and shapes can be measured directly. My current work is on mechanical heterogeneity: how differences in the mechanical properties of individual cells shape the state of the tissue as a whole.</p>
+      </div>
+    </div>
+    <img class="portrait" src="media/portrait.jpg" alt="Portrait of Artur Ruppel" width="720" height="900">
+  </div>
+
+  <section class="block" id="research">
+    <h2>Research</h2>
+    <div class="stack">
+
+      <article class="item">
+        <h3>Mechanical heterogeneity in cancer cell collectives</h3>
+        <p class="meta"><span class="current">Current work</span> · Institut Pasteur</p>
+        <p class="text">The cells of a tissue are never identical. They differ in stiffness, contractility and adhesion, and in tumours these differences are pronounced: soft and stiff cells, fluid and solid regions coexist in the same tissue. Physical models explain how a collective of cells can flow like a fluid or arrest like a solid. In these models, a mixture does not simply behave like the average of its components, and the spatial arrangement of the different cells can matter more than their proportions. My question is how this plays out in a living tissue: how the mechanical differences between individual cells set the state of the whole.</p>
+        <p class="text">I approach this by building tissues in which the heterogeneity is controlled. Two populations of glioblastoma cells that differ in one component of the cytoskeleton, vimentin, are studied alone and mixed, from pairs of cells to tissues of several thousand. At each scale, I measure the shapes, movements and forces of the individual cells together with the behaviour of the tissue as a whole. Simulations of deformable cells, in which the kind and the arrangement of heterogeneity can be varied at will, connect the two.</p>
+        <figure>
+          <div class="row">
+            <video src="media/heterogeneity.mp4" autoplay loop muted playsinline width="984" height="492" aria-label="Time-lapse of two cell populations on a circular micropattern, with segmentation"></video>
+            <video src="media/sim_disc.mp4" autoplay loop muted playsinline width="720" height="720" aria-label="Simulation of deformable cells confined in a disc"></video>
+          </div>
+          <figcaption>Left: wild-type and vimentin-knockout glioblastoma cells cultured together on a circular micropattern. Centre: segmented cells and nuclei, coloured by population. Right: simulation of forty deformable cells confined in a disc.</figcaption>
+        </figure>
+      </article>
+
+      <article class="item">
+        <h3>The elementary unit of tissue rearrangement</h3>
+        <p class="meta">CRBM, Montpellier</p>
+        <p class="text">Tissues change shape by letting cells exchange neighbours. This process, cell intercalation, allows large deformations while the tissue stays coherent. Two mechanisms are known to drive it: contraction of the junction between two cells, and migration of cells in between their neighbours. Theory predicts that each exchange has to cross an energy barrier, and that the height of this barrier decides whether a tissue flows or arrests. In a tissue, however, exchanges are mechanically coupled to one another, and the barrier of a single event had remained out of experimental reach.</p>
+        <p class="text">We isolated a single event by confining four cells on a cross-shaped micropattern. These quadruplets exchange neighbours spontaneously, and the forces can be measured throughout: interfacial tensions from cell geometry, migratory forces from traction force microscopy. Both tension and migration drive the exchange. This holds for MDCK epithelial cells and for <i>Xenopus</i> mesoderm cells, which intercalate in the embryo. The distribution of junction lengths gives an effective energy landscape with a cusp at the point of exchange, as vertex models predict. Elongating the pattern raises the barrier in proportion to the strain and makes exchanges rarer: geometry alone controls how readily cells rearrange.</p>
+        <p class="ref"><a href="#pub-natphys">Ruppel, Misiak et al., Nature Physics (2026)</a></p>
+        <figure>
+          <video src="media/quadruplet.mp4" autoplay loop muted playsinline width="1440" height="506" aria-label="Time-lapse of a cell quadruplet with traction forces and contact angle measurements"></video>
+          <figcaption>A cell quadruplet during a neighbour exchange. Left: traction forces exerted on the substrate. Right: segmented cells with the contact angles from which interfacial tensions are inferred.</figcaption>
+        </figure>
+      </article>
+
+      <article class="item">
+        <h3>Force propagation between epithelial cells</h3>
+        <p class="meta">LIPhy, Grenoble</p>
+        <p class="text">Cells in a tissue coordinate their behaviour through the forces they exert on one another. Mechanical signals travel faster than biochemical ones and can have similar effects. Yet the chain of events had not been described quantitatively: one cell generates a force, the force crosses the contact between the cells, and the neighbouring cell responds.</p>
+        <p class="text">We built a minimal system in which this chain can be followed: two MDCK epithelial cells on an H-shaped micropattern. Using optogenetics, we made one cell contract on demand and measured the response of its neighbour by traction force microscopy. The neighbour responds with a contraction of its own, which a passive material cannot account for, and the pair deforms as a coherent unit. A single cell of the same size behaves differently: its actin network flows instead of building up stress. The strength of the response depends on how the pair is polarised, mechanically and structurally, which we controlled through the shape of the micropattern: it is strongest when the polarisation is perpendicular to the direction of force propagation. The same holds in small tissues. Active response and cellular organisation thus allow mechanical signals to keep their strength as they travel.</p>
+        <p class="ref"><a href="#pub-elife">Ruppel, Wörthmüller et al., eLife (2023)</a></p>
+        <figure>
+          <video src="media/doublet.mp4" autoplay loop muted playsinline width="1280" height="390" aria-label="Time-lapse of a cell doublet in which one cell is photoactivated"></video>
+          <figcaption>One cell of a doublet is photoactivated (blue lines mark the light pulses). Left: actin with traction forces. Centre: traction stress map. Right: strain energy of the activated half (blue) and of the neighbouring half (orange). From Ruppel, Wörthmüller et al., eLife (2023), CC BY.</figcaption>
+        </figure>
+      </article>
+
+    </div>
+  </section>
+
+  <section class="block" id="publications">
+    <h2>Publications</h2>
+    <h3 class="sub">First author</h3>
+    <ol class="list">
+      <li id="pub-natphys">
+        <p class="t">A minimal in vitro assay for cell intercalation highlights the importance of interfacial tension and migratory forces</p>
+        <p class="s"><b>A. Ruppel*</b>, V. Misiak*, S. Arzash, D. Selma-Herrador, T. Boudou, M. L. Manning†, F. Fagotto†, M. Balland†</p>
+        <p class="s"><i>Nature Physics</i> (2026) · <a href="https://doi.org/10.1038/s41567-026-03311-6">doi:10.1038/s41567-026-03311-6</a></p>
+      </li>
+      <li>
+        <p class="t">napariTFM: An open-source tool for traction force microscopy and monolayer stress microscopy</p>
+        <p class="s"><b>A. Ruppel†</b>, D. Wörthmüller, M. Balland, F. Fagotto</p>
+        <p class="s"><i>PLOS Computational Biology</i> 22, e1014045 (2026) · <a href="https://doi.org/10.1371/journal.pcbi.1014045">doi:10.1371/journal.pcbi.1014045</a></p>
+      </li>
+      <li>
+        <p class="t">An open-source Python tool for traction force microscopy on micropatterned substrates</p>
+        <p class="s"><b>A. Ruppel†</b>, V. Misiak, M. Balland†</p>
+        <p class="s"><i>Bio-protocol</i> 15, e5156 (2025) · <a href="https://doi.org/10.21769/BioProtoc.5156">doi:10.21769/BioProtoc.5156</a></p>
+      </li>
+      <li id="pub-elife">
+        <p class="t">Force propagation between epithelial cells depends on active coupling and mechano-structural polarization</p>
+        <p class="s"><b>A. Ruppel*</b>, D. Wörthmüller*, V. Misiak, M. Kelkar, I. Wang, P. Moreau, A. Méry, J. Révilloud, G. Charras, G. Cappello, T. Boudou, U. S. Schwarz, M. Balland</p>
+        <p class="s"><i>eLife</i> 12, e83588 (2023) · <a href="https://doi.org/10.7554/eLife.83588">doi:10.7554/eLife.83588</a></p>
+      </li>
+    </ol>
+    <h3 class="sub">Collaborations</h3>
+    <ol class="list">
+      <li>
+        <p class="t">Remodeling of cadherin contacts in embryonic mesenchymal tissues during differential cell migration</p>
+        <p class="s">D. Rozema, C. Fagotto-Kaufmann, <b>A. Ruppel</b>, P. Lasko, F. Fagotto</p>
+        <p class="s"><i>Developmental Cell</i> 60, 2915–2930 (2025) · <a href="https://doi.org/10.1016/j.devcel.2025.06.009">doi:10.1016/j.devcel.2025.06.009</a></p>
+      </li>
+      <li>
+        <p class="t">A crosstalk between adhesion and phagocytosis integrates macrophage functions into their microenvironment</p>
+        <p class="s">M. Depierre, A. Mularski, <b>A. Ruppel</b>, C. Le Clainche, M. Balland, F. Niedergang</p>
+        <p class="s"><i>iScience</i> 28, 112067 (2025) · <a href="https://doi.org/10.1016/j.isci.2025.112067">doi:10.1016/j.isci.2025.112067</a></p>
+      </li>
+      <li>
+        <p class="t">An EpCAM/Trop2 mechanostat differentially regulates collective behaviour of human carcinoma cells</p>
+        <p class="s">A. Aslemarz, M. Fagotto-Kaufmann, <b>A. Ruppel</b>, C. Fagotto-Kaufmann, M. Balland, P. Lasko, F. Fagotto</p>
+        <p class="s"><i>The EMBO Journal</i> 44, 75–106 (2025) · <a href="https://doi.org/10.1038/s44318-024-00309-9">doi:10.1038/s44318-024-00309-9</a></p>
+      </li>
+      <li>
+        <p class="t">Light-driven biological actuators to probe the rheology of 3D microtissues</p>
+        <p class="s">A. Méry, <b>A. Ruppel</b>, J. Révilloud, M. Balland, G. Cappello, T. Boudou</p>
+        <p class="s"><i>Nature Communications</i> 14, 717 (2023) · <a href="https://doi.org/10.1038/s41467-023-36371-w">doi:10.1038/s41467-023-36371-w</a></p>
+      </li>
+      <li>
+        <p class="t">A mechano-osmotic feedback couples cell volume to the rate of cell deformation</p>
+        <p class="s">L. Venkova, A. S. Vishen, S. Lembo, N. Srivastava, B. Duchamp, <b>A. Ruppel</b>, A. Williart, S. Vassilopoulos, A. Deslys, J. M. Garcia Arcos, A. Diz-Muñoz, M. Balland, J.-F. Joanny, D. Cuvelier, P. Sens, M. Piel</p>
+        <p class="s"><i>eLife</i> 11, e72381 (2022) · <a href="https://doi.org/10.7554/eLife.72381">doi:10.7554/eLife.72381</a></p>
+      </li>
+      <li>
+        <p class="t">Interplay between extracellular matrix stiffness and JAM-A regulates mechanical load on ZO-1 and tight junction assembly</p>
+        <p class="s">A. J. Haas, C. Zihni, <b>A. Ruppel</b>, C. Hartmann, K. Ebnet, M. Tada, M. S. Balda, K. Matter</p>
+        <p class="s"><i>Cell Reports</i> 32, 107924 (2020) · <a href="https://doi.org/10.1016/j.celrep.2020.107924">doi:10.1016/j.celrep.2020.107924</a></p>
+      </li>
+    </ol>
+    <p class="note" style="margin-top:16px">* equal contribution · † corresponding author</p>
+  </section>
+
+  <section class="block" id="software">
+    <h2>Software</h2>
+    <p>I build the software I need for my research and make it available on my <a href="https://github.com/ArturRuppel">GitHub</a> when it is ready to be used by others.</p>
+
+    <div class="stack" style="margin-top:28px">
+      <article class="item">
+        <h3>napariTFM</h3>
+        <p class="meta"><span class="current">Published</span> · open source</p>
+        <p class="text">A napari plugin for traction force microscopy and monolayer stress microscopy. It covers the complete analysis, from bead displacements to traction forces and internal stresses, for single cells and monolayers, on single images or time series.</p>
+        <p class="ref">A. Ruppel et al., <i>PLOS Computational Biology</i> 22, e1014045 (2026) · <a href="https://doi.org/10.1371/journal.pcbi.1014045">Paper</a> · <a href="https://github.com/ArturRuppel/napariTFM">Code</a></p>
+      </article>
+      <article class="item">
+        <h3>ITASC</h3>
+        <p class="meta">Ready to use · open source</p>
+        <p class="text">A napari plugin that segments and tracks cells in dense, highly motile monolayers, where automatic methods break down. It combines <a href="https://github.com/MouseLand/cellpose">Cellpose</a> and <a href="https://github.com/royerlab/ultrack">Ultrack</a> with interactive correction adapted from <a href="https://github.com/Image-Analysis-Hub/Epicure">EpiCure</a>, and gives every cell and its nucleus one identity that holds across the whole recording.</p>
+        <p class="ref"><a href="https://arturruppel.github.io/ITASC/">Documentation</a> · <a href="https://github.com/ArturRuppel/ITASC">Code</a></p>
+      </article>
+    </div>
+
+    <h3 class="sub">Private tools</h3>
+    <p>These form my own working environment. Some have a public repository, but none has been tested on other machines. I am happy to share them on request.</p>
+    <ul class="logos" id="logos">
+      <li><button type="button" title="Mnemosyne" aria-label="Mnemosyne" aria-pressed="false" data-name="Mnemosyne" data-text="An electronic lab notebook whose entries stay linked to the data files they describe, wherever those already live on disk. Protocols, analysis code, reports, talks and interactive viewers of the recordings sit in the same record."><img src="media/logos/mnemosyne.svg" alt="" width="56" height="56"></button></li>
+      <li><button type="button" title="Pythia" aria-label="Pythia" aria-pressed="false" data-name="Pythia" data-text="A knowledge graph of the literature I read. Each claim, question and method in a paper becomes a node tied to the exact sentence that supports it, and specific claims are grouped under broader ones, so the graph shows what is known and what is still open."><img src="media/logos/pythia.svg" alt="" width="56" height="56"></button></li>
+      <li><button type="button" title="Iris" aria-label="Iris" aria-pressed="false" data-name="Iris" data-text="A desktop application for publication figures and statistics. The data table, the figure and the statistical test come from a single specification, so the plot and the test cannot disagree. Each analysis is saved as one file that can be edited by hand or generated from code."><img src="media/logos/iris.svg" alt="" width="56" height="56"></button></li>
+      <li><button type="button" title="Calliope" aria-label="Calliope" aria-pressed="false" data-name="Calliope" data-text="A slide editor and presenter that runs in the browser. Slides are drawn as vector graphics, on a tablet with a pencil if wanted, presented with embedded movies, and exported as a standalone web page or PDF."><img src="media/logos/calliope.svg" alt="" width="56" height="56"></button></li>
+      <li><button type="button" title="Athena" aria-label="Athena" aria-pressed="false" data-name="Athena" data-text="A writing workspace that shows a text next to the structure of its argument. Each idea is connected to the passages that express it. An AI assistant gives feedback on the draft and links ideas to their sources in Pythia, but it does not write the text."><img src="media/logos/athena.svg" alt="" width="56" height="56"></button></li>
+      <li><button type="button" title="Hephaestus" aria-label="Hephaestus" aria-pressed="false" data-name="Hephaestus" data-text="A browser-based workspace for image analysis, usable from a tablet. It browses large microscopy recordings, sends segmentation jobs to a computing cluster, and lets me track the cells and correct the result by hand."><img src="media/logos/hephaestus.svg" alt="" width="56" height="56"></button></li>
+    </ul>
+    <div class="logo-panel" id="logo-panel" aria-live="polite"><p class="note">Select a logo to see what the tool does.</p></div>
+    <script>
+    (function () {
+      var panel = document.getElementById('logo-panel');
+      var buttons = document.querySelectorAll('#logos button');
+      buttons.forEach(function (b) {
+        b.addEventListener('click', function () {
+          buttons.forEach(function (o) { o.setAttribute('aria-pressed', o === b ? 'true' : 'false'); });
+          panel.innerHTML = '';
+          var t = document.createElement('p'); t.className = 't'; t.textContent = b.dataset.name;
+          var d = document.createElement('p'); d.textContent = b.dataset.text;
+          panel.append(t, d);
+        });
+      });
+    })();
+    </script>
+  </section>
+
+  <section class="block" id="cv">
+    <h2>Curriculum vitae</h2>
+    <h3 class="sub">Research</h3>
+    <ol class="rows">
+      <li><span class="y">2025 – present</span><div><p style="font-weight:600">Postdoctoral researcher, Institut Pasteur, Paris</p><p class="note">Cell Polarity, Migration and Cancer Unit, Sandrine Etienne-Manneville</p></div></li>
+      <li><span class="y">2022 – 2025</span><div><p style="font-weight:600">Postdoctoral researcher, CRBM, CNRS and University of Montpellier</p><p class="note">Group of François Fagotto</p></div></li>
+      <li><span class="y">2018 – 2022</span><div><p style="font-weight:600">PhD in biophysics, LIPhy, CNRS and Université Grenoble Alpes</p><p class="note">Thesis: <i>Optogenetic interrogation of intercellular propagation of force signals</i>. Supervised by Martial Balland and Thomas Boudou. Defended 6 May 2022.</p></div></li>
+    </ol>
+    <h3 class="sub">Education</h3>
+    <ol class="rows">
+      <li><span class="y">2016 – 2018</span><div><p style="font-weight:600">MSc in biomedical engineering, Grenoble INP – Phelma</p><p class="note">Double degree with TU Darmstadt</p></div></li>
+      <li><span class="y">2012 – 2018</span><div><p style="font-weight:600">MSc in electrical engineering, Technische Universität Darmstadt</p><p class="note">Specialisation in micro- and precision engineering</p></div></li>
+    </ol>
+    <h3 class="sub">Talks</h3>
+    <ol class="rows">
+      <li><span class="y">2026</span><div><p>Seminar, group of Abdul Barakat</p><p class="note">LadHyX, École Polytechnique, Palaiseau</p></div></li>
+      <li><span class="y">2026</span><div><p>Paris Postdoc Seminar</p><p class="note">Institut Jacques Monod, Paris</p></div></li>
+      <li><span class="y">2026</span><div><p>QBio seminar</p><p class="note">Institut Pasteur, Paris</p></div></li>
+      <li><span class="y">2025</span><div><p>Cytoskeleton Day</p><p class="note">Paris</p></div></li>
+      <li><span class="y">2025</span><div><p>Theory seminar, group of Pierre Sens</p><p class="note">Institut Curie, Paris</p></div></li>
+      <li><span class="y">2022</span><div><p>Cell and Developmental Systems</p><p class="note">Arolla, Switzerland</p></div></li>
+      <li><span class="y">2019</span><div><p>French Optogenetics Club</p><p class="note">Paris</p></div></li>
+    </ol>
+    <h3 class="sub">Posters and workshops</h3>
+    <ol class="rows">
+      <li><span class="y">2023</span><div><p>CellMech</p><p class="note">Marseille · poster</p></div></li>
+      <li><span class="y">2023</span><div><p>Physics of Living Systems</p><p class="note">Dresden, Germany · poster</p></div></li>
+      <li><span class="y">2021</span><div><p>MiFoBio summer school</p><p class="note">Hyères, France · workshop and poster</p></div></li>
+      <li><span class="y">2021</span><div><p>Cell la vie</p><p class="note">Online · poster</p></div></li>
+      <li><span class="y">2021</span><div><p>EMBO workshop ImmunoBiophysics</p><p class="note">Online · poster</p></div></li>
+      <li><span class="y">2019</span><div><p>CellMech</p><p class="note">Milan, Italy · poster</p></div></li>
+      <li><span class="y">2018</span><div><p>Mechanobiology of Polarized Cells, summer school</p><p class="note">Les Houches, France · poster</p></div></li>
+    </ol>
+    <h3 class="sub">Languages</h3>
+    <p>German (native), English and French (fluent).</p>
+  </section>
+
+  <section class="block" id="contact">
+    <h2>Contact</h2>
+    <dl class="contact">
+      <dt>Email</dt><dd><a href="mailto:artur.ruppel@pasteur.fr">artur.ruppel@pasteur.fr</a></dd>
+      <dt>Address</dt><dd>Institut Pasteur, 25–28 rue du Docteur Roux, 75015 Paris, France</dd>
+      <dt>Code</dt><dd><a href="https://github.com/ArturRuppel">github.com/ArturRuppel</a></dd>
+      <dt>ORCID</dt><dd><a href="https://orcid.org/0000-0002-2541-8257">0000-0002-2541-8257</a></dd>
+      <dt>Google Scholar</dt><dd><a href="https://scholar.google.com/citations?user=UXqbRDwAAAAJ">Artur Ruppel</a></dd>
+      <dt>Bluesky</dt><dd><a href="https://bsky.app/profile/arturruppel.bsky.social">@arturruppel.bsky.social</a></dd>
+      <dt>LinkedIn</dt><dd><a href="https://www.linkedin.com/in/artur-ruppel-6b4b8a131/">linkedin.com/in/artur-ruppel-6b4b8a131</a></dd>
+    </dl>
+  </section>
+
+</main>
+
+<footer><div class="wrap">© 2026 Artur Ruppel</div></footer>
+</body>
+</html>
