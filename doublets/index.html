@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Viewer</title>
+  <link rel="stylesheet" href="scope-controls.css?v=30a40a69">
+  <link rel="stylesheet" href="view.css?v=9642b8e5">
+  <!-- Classic scripts only: this page is opened straight from a file share. -->
+  <script src="manifest.js?v=6da0db64"></script>
+  <script src="scope-controls.js?v=b5ab8486"></script>
+</head>
+<body>
+  <header class="bar">
+    <a id="back" class="back" hidden></a>
+    <div class="title"><strong id="title"></strong><span id="subtitle"></span></div>
+    <nav id="datasets" class="datasets" aria-label="Data set" hidden></nav>
+    <label>Z <select id="zview"></select></label>
+    <button id="layers-toggle" class="sc-icon sc-wide" type="button" aria-expanded="false">Layers</button>
+  </header>
+  <main>
+    <aside class="dock" id="dock">
+      <div id="layer-controls"></div>
+      <div id="layer-list"></div>
+      <p id="about" class="about"></p>
+    </aside>
+    <section class="view">
+      <div id="viewport" class="viewport" tabindex="0" aria-label="Image; drag to pan, scroll or pinch to zoom">
+        <div id="stage" class="stage"></div>
+        <button id="home" class="sc-icon sc-wide home" type="button" title="Fit to window">⌂</button>
+        <div id="readout" class="readout"></div>
+      </div>
+      <div id="dims" class="dims"></div>
+    </section>
+  </main>
+  <svg width="0" height="0" aria-hidden="true" style="position:absolute"><defs id="filters"></defs></svg>
+  <script src="viewer-cache.js?v=736af595"></script>
+  <script src="layer-arrangement.js?v=ced46845"></script>
+  <script src="view.js?v=f284449e"></script>
+</body>
+</html>

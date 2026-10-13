@@ -45,6 +45,7 @@ a:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
 .ph.wide { aspect-ratio: 16 / 9; }
 figure img, figure video { display: block; width: 100%; height: auto; }
 figure .row { display: grid; grid-template-columns: 2fr 1fr; gap: 0; align-items: center; }
+figure .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: center; }
 img.portrait { display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; }
 .todo { color: var(--muted); font-style: italic; }
 figcaption { margin-top: 8px; font-size: 15px; color: var(--muted); }
@@ -66,6 +67,7 @@ section.block > h2 { font-size: 24px; font-weight: 600; color: var(--navy); marg
 .list .t { font-weight: 600; line-height: 1.4; }
 .list .s { font-size: 16px; color: var(--muted); margin-top: 3px; }
 .list .s b { color: var(--fg); font-weight: 600; }
+.list .c { font-size: 16px; margin-top: 6px; }
 .rows > li { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 16px; padding-block: 12px; border-top: 1px solid var(--line); }
 .rows > li:first-child { border-top: 0; padding-top: 0; }
 .rows .y { color: var(--muted); font-variant-numeric: tabular-nums; }
@@ -82,6 +84,10 @@ section.block > h2 { font-size: 24px; font-weight: 600; color: var(--navy); marg
 .logo-panel { margin-top: 14px; min-height: 5.2em; }
 .logo-panel .t { font-weight: 600; }
 
+/* embedded viewer */
+.viewer { margin: 18px 0 14px; }
+.viewer iframe { display: block; width: 100%; height: 560px; border: 1px solid var(--line); background: var(--fill); }
+@media (max-width: 600px) { .viewer iframe { height: 480px; } }
 dl.contact { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 8px 16px; }
 dl.contact dt { color: var(--muted); }
 dl.contact dd { overflow-wrap: anywhere; }
@@ -94,6 +100,7 @@ footer { border-top: 1px solid var(--line); padding-block: 20px 40px; font-size:
   .opening img.portrait { width: 140px; order: -1; }
   .bar .name { display: none; }
   .rows > li, dl.contact { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+  figure .pair { grid-template-columns: minmax(0, 1fr); }
   dl.contact dd { margin-bottom: 10px; }
 }
 </style>
@@ -122,8 +129,8 @@ footer { border-top: 1px solid var(--line); padding-block: 20px 40px; font-size:
       <h1>Artur Ruppel</h1>
       <p class="role">Experimental biophysicist<br>Institut Pasteur, Paris</p>
       <div class="about">
-        <p>Living systems are organised in layers, from molecules to cells to tissues, and each layer has properties that its parts do not have on their own. I study the step from cells to tissues: how local interactions between neighbouring cells give rise to the collective behaviour of the tissue.</p>
-        <p>My approach is to reconstitute minimal tissues, from two cells to several thousand, in which forces and shapes can be measured directly. My current work is on mechanical heterogeneity: how differences in the mechanical properties of individual cells shape the state of the tissue as a whole.</p>
+        <p>I am an engineer by training, and I started my scientific journey in Grenoble, studying the mechanics of force transmission between epithelial cells. There I became fascinated by how cells build structures many times their own size during development, and so in Montpellier I turned to the elementary unit of tissue morphogenesis: the T1 transition, in which cells exchange neighbours. The next step was the scale of the whole tissue. In 2025 I joined Institut Pasteur to address tissue mechanics and organisation in cancer, where the tight homeostatic control of a healthy tissue goes awry.</p>
+        <p>Throughout, my approach has stayed the same: I build minimal tissues, from two cells to several thousand, in which forces and shapes can be measured directly. Micropatterning sets the geometry, optogenetics lets me switch contractility on and off, traction force microscopy gives me the forces, and segmentation and tracking follow every cell, with simulations alongside to make sense of the measurements. What occupies me now is mechanical heterogeneity. The cells of a tumour differ in stiffness, contractility and adhesion, and I want to understand how these differences between individual cells set the state of the tissue as a whole.</p>
       </div>
     </div>
     <img class="portrait" src="media/portrait.jpg" alt="Portrait of Artur Ruppel" width="720" height="900">
@@ -135,9 +142,13 @@ footer { border-top: 1px solid var(--line); padding-block: 20px 40px; font-size:
 
       <article class="item">
         <h3>Mechanical heterogeneity in cancer cell collectives</h3>
-        <p class="meta"><span class="current">Current work</span> · Institut Pasteur</p>
-        <p class="text">The cells of a tissue are never identical. They differ in stiffness, contractility and adhesion, and in tumours these differences are pronounced: soft and stiff cells, fluid and solid regions coexist in the same tissue. Physical models explain how a collective of cells can flow like a fluid or arrest like a solid. In these models, a mixture does not simply behave like the average of its components, and the spatial arrangement of the different cells can matter more than their proportions. My question is how this plays out in a living tissue: how the mechanical differences between individual cells set the state of the whole.</p>
-        <p class="text">I approach this by building tissues in which the heterogeneity is controlled. Two populations of glioblastoma cells that differ in one component of the cytoskeleton, vimentin, are studied alone and mixed, from pairs of cells to tissues of several thousand. At each scale, I measure the shapes, movements and forces of the individual cells together with the behaviour of the tissue as a whole. Simulations of deformable cells, in which the kind and the arrangement of heterogeneity can be varied at will, connect the two.</p>
+        <p class="meta"><span class="current">Current work</span> · Institut Pasteur · with Sandrine Etienne-Manneville</p>
+        <p class="text">No two cells in a tissue are the same. In a tumour the differences are stark: soft cells next to stiff ones, regions that flow next to regions that are stuck. Physics has models for how a collective of cells can flow like a fluid or arrest like a solid, and these models make a prediction I find remarkable: a mixture does not behave like the average of its components, and where the different cells sit can matter more than how many of them there are. I want to know whether this holds in a living tissue, and how the mechanical differences between individual cells set the state of the whole.</p>
+        <figure>
+          <img src="media/solid_fluid.png" alt="Drawing of a solid-like tissue, with short cell velocity arrows, and a fluid-like tissue, with long ones" width="1440" height="756">
+          <figcaption>A tissue can be solid-like, with cells that barely move, or fluid-like, with cells that flow past one another. Arrows show cell velocity.</figcaption>
+        </figure>
+        <p class="text">To find out, I build tissues in which the heterogeneity can be controlled. I take two populations of glioblastoma cells that differ in a single component of the cytoskeleton, vimentin, and study them alone and mixed, from pairs of cells to tissues of several thousand. At every scale I measure the shapes, movements and forces of the individual cells alongside the behaviour of the tissue as a whole, and I run simulations of deformable cells, in which the kind and the arrangement of heterogeneity can be controlled more directly, to connect the two.</p>
         <figure>
           <div class="row">
             <video src="media/heterogeneity.mp4" autoplay loop muted playsinline width="984" height="492" aria-label="Time-lapse of two cell populations on a circular micropattern, with segmentation"></video>
@@ -149,25 +160,53 @@ footer { border-top: 1px solid var(--line); padding-block: 20px 40px; font-size:
 
       <article class="item">
         <h3>The elementary unit of tissue rearrangement</h3>
-        <p class="meta">CRBM, Montpellier</p>
-        <p class="text">Tissues change shape by letting cells exchange neighbours. This process, cell intercalation, allows large deformations while the tissue stays coherent. Two mechanisms are known to drive it: contraction of the junction between two cells, and migration of cells in between their neighbours. Theory predicts that each exchange has to cross an energy barrier, and that the height of this barrier decides whether a tissue flows or arrests. In a tissue, however, exchanges are mechanically coupled to one another, and the barrier of a single event had remained out of experimental reach.</p>
-        <p class="text">We isolated a single event by confining four cells on a cross-shaped micropattern. These quadruplets exchange neighbours spontaneously, and the forces can be measured throughout: interfacial tensions from cell geometry, migratory forces from traction force microscopy. Both tension and migration drive the exchange. This holds for MDCK epithelial cells and for <i>Xenopus</i> mesoderm cells, which intercalate in the embryo. The distribution of junction lengths gives an effective energy landscape with a cusp at the point of exchange, as vertex models predict. Elongating the pattern raises the barrier in proportion to the strain and makes exchanges rarer: geometry alone controls how readily cells rearrange.</p>
+        <p class="meta">CRBM, Montpellier · with François Fagotto, Martial Balland and Lisa Manning</p>
+        <p class="text">A tissue changes shape by letting its cells exchange neighbours. This process, cell intercalation or the T1 transition, is how a tissue can deform a great deal and still hold together. Two mechanisms are known to drive it: the junction between two cells contracts, or cells migrate in between their neighbours. Theory says that every exchange has to cross an energy barrier, and that the height of this barrier decides whether the tissue flows or arrests. The trouble is that in a tissue the exchanges are mechanically coupled to one another, and so the barrier of a single event had never been measured.</p>
+        <figure>
+          <img style="width:50%;margin-inline:auto" src="media/quadruplet_question.png" alt="Drawing of four cells exchanging neighbours: two cells that touch along a junction lose contact and the other two come into contact" width="1440" height="714">
+          <figcaption>A neighbour exchange, or T1 transition, in its simplest form: four cells, one junction. The two cells that share it separate, the other two come into contact.</figcaption>
+        </figure>
+        <figure>
+          <img src="media/intercalation_mechanisms.png" alt="Drawing of the two mechanisms of cell intercalation: cells migrating in between their neighbours, and a junction contracting until it vanishes and a new one expands" width="1440" height="393">
+          <figcaption>The two mechanisms of cell intercalation. Left: cells migrate in between their neighbours. Right: the junction between two cells contracts until it vanishes and a new junction expands between the other two. Reviewed in Huebner and Wallingford, <i>Developmental Cell</i> (2018).</figcaption>
+        </figure>
+        <p class="text">We isolated a single event by confining four cells on a cross-shaped micropattern. These quadruplets exchange neighbours on their own, and the forces can be followed throughout: interfacial tensions from the shapes of the cells, migratory forces from traction force microscopy. We found that both tension and migration drive the exchange, in MDCK epithelial cells as well as in <i>Xenopus</i> mesoderm cells. From the distribution of junction lengths we obtained an effective energy landscape with a cusp at the point of exchange, just as vertex models predict. And when we elongated the pattern, the barrier rose in proportion to the strain and exchanges became rarer: geometry controls how readily cells rearrange.</p>
+        <figure>
+          <img src="media/xenopus_workflow.png" alt="From embryo to quadruplet: a Xenopus embryo, a tissue explant dissociated into single cells, seeded on a cross-shaped micropattern, forming a quadruplet" width="1440" height="324">
+          <figcaption>From embryo to quadruplet. A piece of mesoderm is cut from a <i>Xenopus</i> embryo and dissociated into single cells, which are seeded on cross-shaped micropatterns. Four cells fill a pattern.</figcaption>
+        </figure>
         <p class="ref"><a href="#pub-natphys">Ruppel, Misiak et al., Nature Physics (2026)</a></p>
         <figure>
           <video src="media/quadruplet.mp4" autoplay loop muted playsinline width="1440" height="506" aria-label="Time-lapse of a cell quadruplet with traction forces and contact angle measurements"></video>
           <figcaption>A cell quadruplet during a neighbour exchange. Left: traction forces exerted on the substrate. Right: segmented cells with the contact angles from which interfacial tensions are inferred.</figcaption>
         </figure>
+        <figure class="viewer">
+          <iframe src="quad/?v=4" title="Interactive viewer of Xenopus cell quadruplets" loading="lazy"></iframe>
+          <figcaption>All 21 <i>Xenopus</i> quadruplets of the published data, in the viewer of my lab notebook: segmented cells and traction forces over time. Use the sliders to move through time and between quadruplets. <a href="quad/">Open full page</a> · <a href="https://zenodo.org/records/18921474">Data</a> (CC BY 4.0)</figcaption>
+        </figure>
       </article>
 
       <article class="item">
         <h3>Force propagation between epithelial cells</h3>
-        <p class="meta">LIPhy, Grenoble</p>
-        <p class="text">Cells in a tissue coordinate their behaviour through the forces they exert on one another. Mechanical signals travel faster than biochemical ones and can have similar effects. Yet the chain of events had not been described quantitatively: one cell generates a force, the force crosses the contact between the cells, and the neighbouring cell responds.</p>
-        <p class="text">We built a minimal system in which this chain can be followed: two MDCK epithelial cells on an H-shaped micropattern. Using optogenetics, we made one cell contract on demand and measured the response of its neighbour by traction force microscopy. The neighbour responds with a contraction of its own, which a passive material cannot account for, and the pair deforms as a coherent unit. A single cell of the same size behaves differently: its actin network flows instead of building up stress. The strength of the response depends on how the pair is polarised, mechanically and structurally, which we controlled through the shape of the micropattern: it is strongest when the polarisation is perpendicular to the direction of force propagation. The same holds in small tissues. Active response and cellular organisation thus allow mechanical signals to keep their strength as they travel.</p>
+        <p class="meta">LIPhy, Grenoble · with Martial Balland, Thomas Boudou and Ulrich Schwarz</p>
+        <p class="text">Cells in a tissue coordinate what they do through the forces they exert on one another. Mechanical signals travel faster than biochemical ones and can have much the same effect. Yet nobody had followed the chain of events quantitatively: one cell generates a force, the force crosses the contact between the cells, and the neighbour responds. This was the question of my PhD.</p>
+        <figure>
+          <img src="media/doublet_question.png" alt="Drawing of a cell contracting inside a tissue, its neighbours marked with question marks, reduced to a pair of cells on a micropattern" width="1440" height="654">
+          <figcaption>How do cells respond to the forces of their neighbours? One cell in a tissue contracts; the question is reduced to a pair of cells.</figcaption>
+        </figure>
+        <p class="text">We built a minimal system in which the chain can be followed: two MDCK epithelial cells on an H-shaped micropattern. With optogenetics we made one cell contract on demand, and with traction force microscopy we measured how its neighbour responded. The neighbour, it turned out, actively contracts in its own right. A single cell of the same size behaves differently: its actin network flows instead of building up stress. How strongly the neighbour responds depends on how the cell pair is mechanically and structurally polarised, which we could set through the shape of the micropattern. The response is strongest when the polarisation is perpendicular to the direction in which the force travels, and the same holds in small tissues of a few hundred cells. And so active response and cellular organisation allow mechanical signals to keep their strength as they travel from cell to cell.</p>
+        <figure>
+          <img src="media/doublet_scheme.png" alt="Drawing of the three tools: an H-shaped micropattern that yields a cell doublet, light that makes one cell contract, and marker beads in a soft substrate that move when the cell pulls" width="1440" height="950">
+          <figcaption>The three tools of the experiment. Micropatterns give doublets of the same shape and size; optogenetics makes one cell contract on demand; marker beads in the soft substrate move when the cells pull, and their displacement gives the forces.</figcaption>
+        </figure>
         <p class="ref"><a href="#pub-elife">Ruppel, Wörthmüller et al., eLife (2023)</a></p>
         <figure>
           <video src="media/doublet.mp4" autoplay loop muted playsinline width="1280" height="390" aria-label="Time-lapse of a cell doublet in which one cell is photoactivated"></video>
           <figcaption>One cell of a doublet is photoactivated (blue lines mark the light pulses). Left: actin with traction forces. Centre: traction stress map. Right: strain energy of the activated half (blue) and of the neighbouring half (orange). From Ruppel, Wörthmüller et al., eLife (2023), CC BY.</figcaption>
+        </figure>
+        <figure class="viewer">
+          <iframe src="doublets/?v=1" title="Interactive viewer of optogenetic cell doublets" loading="lazy"></iframe>
+          <figcaption>The published data in the viewer of my lab notebook: 29 doublets with the left cell activated, 42 doublets with both cells activated and 41 single cells with the left half activated. Light pulses come once a minute between minute 20 and 30; the readout marks them. Switch between actin, displacement, traction and stress under Layers. <a href="doublets/">Open full page</a> · <a href="https://doi.org/10.5061/dryad.sj3tx9683">Data</a> (CC0)</figcaption>
         </figure>
       </article>
 
@@ -200,36 +239,43 @@ footer { border-top: 1px solid var(--line); padding-block: 20px 40px; font-size:
       </li>
     </ol>
     <h3 class="sub">Collaborations</h3>
+    <p class="note" style="margin-bottom:14px">Force measurements, and sometimes simulations, for the questions of others.</p>
     <ol class="list">
       <li>
         <p class="t">Remodeling of cadherin contacts in embryonic mesenchymal tissues during differential cell migration</p>
         <p class="s">D. Rozema, C. Fagotto-Kaufmann, <b>A. Ruppel</b>, P. Lasko, F. Fagotto</p>
         <p class="s"><i>Developmental Cell</i> 60, 2915–2930 (2025) · <a href="https://doi.org/10.1016/j.devcel.2025.06.009">doi:10.1016/j.devcel.2025.06.009</a></p>
+        <p class="c">I repeated the key experiments with a myosin construct expressed at lower levels (MHCIIA-StayGold). They confirmed that myosin is recruited to the cortex next to the contact in the last phase of detachment, after the cadherins have condensed, and that the construct leaves cortical tension and migration speed unchanged.</p>
       </li>
       <li>
         <p class="t">A crosstalk between adhesion and phagocytosis integrates macrophage functions into their microenvironment</p>
         <p class="s">M. Depierre, A. Mularski, <b>A. Ruppel</b>, C. Le Clainche, M. Balland, F. Niedergang</p>
         <p class="s"><i>iScience</i> 28, 112067 (2025) · <a href="https://doi.org/10.1016/j.isci.2025.112067">doi:10.1016/j.isci.2025.112067</a></p>
+        <p class="c">I helped set up the traction force measurements and interpret them.</p>
       </li>
       <li>
         <p class="t">An EpCAM/Trop2 mechanostat differentially regulates collective behaviour of human carcinoma cells</p>
         <p class="s">A. Aslemarz, M. Fagotto-Kaufmann, <b>A. Ruppel</b>, C. Fagotto-Kaufmann, M. Balland, P. Lasko, F. Fagotto</p>
         <p class="s"><i>The EMBO Journal</i> 44, 75–106 (2025) · <a href="https://doi.org/10.1038/s44318-024-00309-9">doi:10.1038/s44318-024-00309-9</a></p>
+        <p class="c">I measured traction and cell-cell forces of MCF7 doublets with and without EpCAM or Trop2, and ran Cellular Potts simulations of spheroid spreading. The altered tensions alone account for the different spreading phenotypes.</p>
       </li>
       <li>
         <p class="t">Light-driven biological actuators to probe the rheology of 3D microtissues</p>
         <p class="s">A. Méry, <b>A. Ruppel</b>, J. Révilloud, M. Balland, G. Cappello, T. Boudou</p>
         <p class="s"><i>Nature Communications</i> 14, 717 (2023) · <a href="https://doi.org/10.1038/s41467-023-36371-w">doi:10.1038/s41467-023-36371-w</a></p>
+        <p class="c">I took part in designing the experiments, in the measurements and in the analysis.</p>
       </li>
       <li>
         <p class="t">A mechano-osmotic feedback couples cell volume to the rate of cell deformation</p>
         <p class="s">L. Venkova, A. S. Vishen, S. Lembo, N. Srivastava, B. Duchamp, <b>A. Ruppel</b>, A. Williart, S. Vassilopoulos, A. Deslys, J. M. Garcia Arcos, A. Diz-Muñoz, M. Balland, J.-F. Joanny, D. Cuvelier, P. Sens, M. Piel</p>
         <p class="s"><i>eLife</i> 11, e72381 (2022) · <a href="https://doi.org/10.7554/eLife.72381">doi:10.7554/eLife.72381</a></p>
+        <p class="c">I measured the traction forces of cells in control conditions and under ROCK and Arp2/3 inhibition, to go with the volume measurements of the team.</p>
       </li>
       <li>
         <p class="t">Interplay between extracellular matrix stiffness and JAM-A regulates mechanical load on ZO-1 and tight junction assembly</p>
         <p class="s">A. J. Haas, C. Zihni, <b>A. Ruppel</b>, C. Hartmann, K. Ebnet, M. Tada, M. S. Balda, K. Matter</p>
         <p class="s"><i>Cell Reports</i> 32, 107924 (2020) · <a href="https://doi.org/10.1016/j.celrep.2020.107924">doi:10.1016/j.celrep.2020.107924</a></p>
+        <p class="c">I helped set up the traction force measurements and analyse them.</p>
       </li>
     </ol>
     <p class="note" style="margin-top:16px">* equal contribution · † corresponding author</p>
@@ -244,7 +290,7 @@ footer { border-top: 1px solid var(--line); padding-block: 20px 40px; font-size:
         <h3>napariTFM</h3>
         <p class="meta"><span class="current">Published</span> · open source</p>
         <p class="text">A napari plugin for traction force microscopy and monolayer stress microscopy. It covers the complete analysis, from bead displacements to traction forces and internal stresses, for single cells and monolayers, on single images or time series.</p>
-        <p class="ref">A. Ruppel et al., <i>PLOS Computational Biology</i> 22, e1014045 (2026) · <a href="https://doi.org/10.1371/journal.pcbi.1014045">Paper</a> · <a href="https://github.com/ArturRuppel/napariTFM">Code</a></p>
+        <p class="ref">A. Ruppel et al., <i>PLOS Computational Biology</i> 22, e1014045 (2026) · <a href="https://doi.org/10.1371/journal.pcbi.1014045">Paper</a> · <a href="https://github.com/ArturRuppel/napariTFM">Code</a> · <a href="https://zenodo.org/records/18390989">Test data</a></p>
       </article>
       <article class="item">
         <h3>ITASC</h3>
@@ -261,7 +307,7 @@ footer { border-top: 1px solid var(--line); padding-block: 20px 40px; font-size:
       <li><button type="button" title="Pythia" aria-label="Pythia" aria-pressed="false" data-name="Pythia" data-text="A knowledge graph of the literature I read. Each claim, question and method in a paper becomes a node tied to the exact sentence that supports it, and specific claims are grouped under broader ones, so the graph shows what is known and what is still open."><img src="media/logos/pythia.svg" alt="" width="56" height="56"></button></li>
       <li><button type="button" title="Iris" aria-label="Iris" aria-pressed="false" data-name="Iris" data-text="A desktop application for publication figures and statistics. The data table, the figure and the statistical test come from a single specification, so the plot and the test cannot disagree. Each analysis is saved as one file that can be edited by hand or generated from code."><img src="media/logos/iris.svg" alt="" width="56" height="56"></button></li>
       <li><button type="button" title="Calliope" aria-label="Calliope" aria-pressed="false" data-name="Calliope" data-text="A slide editor and presenter that runs in the browser. Slides are drawn as vector graphics, on a tablet with a pencil if wanted, presented with embedded movies, and exported as a standalone web page or PDF."><img src="media/logos/calliope.svg" alt="" width="56" height="56"></button></li>
-      <li><button type="button" title="Athena" aria-label="Athena" aria-pressed="false" data-name="Athena" data-text="A writing workspace that shows a text next to the structure of its argument. Each idea is connected to the passages that express it. An AI assistant gives feedback on the draft and links ideas to their sources in Pythia, but it does not write the text."><img src="media/logos/athena.svg" alt="" width="56" height="56"></button></li>
+      <li><button type="button" title="Athena" aria-label="Athena" aria-pressed="false" data-name="Athena" data-text="A writing workspace that shows a text next to the structure of its argument. Each idea is connected to the passages that express it. An AI assistant gives feedback on the draft and links ideas to their sources in Pythia."><img src="media/logos/athena.svg" alt="" width="56" height="56"></button></li>
       <li><button type="button" title="Hephaestus" aria-label="Hephaestus" aria-pressed="false" data-name="Hephaestus" data-text="A browser-based workspace for image analysis, usable from a tablet. It browses large microscopy recordings, sends segmentation jobs to a computing cluster, and lets me track the cells and correct the result by hand."><img src="media/logos/hephaestus.svg" alt="" width="56" height="56"></button></li>
     </ul>
     <div class="logo-panel" id="logo-panel" aria-live="polite"><p class="note">Select a logo to see what the tool does.</p></div>
@@ -295,6 +341,10 @@ footer { border-top: 1px solid var(--line); padding-block: 20px 40px; font-size:
       <li><span class="y">2016 – 2018</span><div><p style="font-weight:600">MSc in biomedical engineering, Grenoble INP – Phelma</p><p class="note">Double degree with TU Darmstadt</p></div></li>
       <li><span class="y">2012 – 2018</span><div><p style="font-weight:600">MSc in electrical engineering, Technische Universität Darmstadt</p><p class="note">Specialisation in micro- and precision engineering</p></div></li>
     </ol>
+    <h3 class="sub">Supervision</h3>
+    <ol class="rows">
+      <li><span class="y">2021</span><div><p style="font-weight:600">Vladimir Misiak, master's student, LIPhy, Grenoble</p><p class="note">Co-supervised with Martial Balland. Co-first author of <a href="#pub-natphys">Ruppel, Misiak et al., Nature Physics (2026)</a>.</p></div></li>
+    </ol>
     <h3 class="sub">Talks</h3>
     <ol class="rows">
       <li><span class="y">2026</span><div><p>Seminar, group of Abdul Barakat</p><p class="note">LadHyX, École Polytechnique, Palaiseau</p></div></li>
@@ -307,6 +357,7 @@ footer { border-top: 1px solid var(--line); padding-block: 20px 40px; font-size:
     </ol>
     <h3 class="sub">Posters and workshops</h3>
     <ol class="rows">
+      <li><span class="y">2026</span><div><p>PhysCell</p><p class="note">Egmond aan Zee, Netherlands · poster</p></div></li>
       <li><span class="y">2023</span><div><p>CellMech</p><p class="note">Marseille · poster</p></div></li>
       <li><span class="y">2023</span><div><p>Physics of Living Systems</p><p class="note">Dresden, Germany · poster</p></div></li>
       <li><span class="y">2021</span><div><p>MiFoBio summer school</p><p class="note">Hyères, France · workshop and poster</p></div></li>

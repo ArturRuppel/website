@@ -1,0 +1,81 @@
+/* Static viewer: the scope-controls palette, which carries the family (Harmonia) look. */
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+body { display: flex; flex-direction: column; background: var(--sc-ground); color: var(--sc-ink); font: 13px var(--sc-font); }
+.bar { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; padding: 8px 16px; background: var(--sc-bar); color: var(--sc-bar-ink); border-bottom: 2px solid var(--sc-bar-rule); }
+.bar .title { display: flex; flex-direction: column; margin-right: auto; min-width: 0; }
+.bar .title span { color: var(--sc-muted); font-size: 11px; }
+.bar label { display: flex; align-items: center; gap: 6px; font-size: 12px; }
+.bar label[hidden] { display: none; }
+.bar select { max-width: 60vw; font: inherit; padding: 3px 6px; border-radius: var(--sc-radius); border: 1px solid var(--sc-line); background: var(--sc-surface); color: inherit; }
+#layers-toggle { display: none; }
+.back { flex: none; padding: 4px 10px; border: 1px solid var(--sc-line); border-radius: var(--sc-radius); color: inherit; text-decoration: none; font-size: 12px; white-space: nowrap; }
+.back:hover { border-color: var(--sc-accent); }
+.back[hidden] { display: none; }
+main { flex: 1; display: grid; grid-template-columns: 280px 1fr; min-height: 0; }
+.dock { display: flex; flex-direction: column; min-height: 0; overflow-y: auto; background: var(--sc-surface); border-right: 1px solid var(--sc-line); }
+#layer-controls { padding: 8px 12px 0; }
+.about { margin: 10px 12px; color: var(--sc-muted); font-size: 11px; line-height: 1.45; }
+.view { display: flex; flex-direction: column; min-width: 0; min-height: 0; }
+.viewport { position: relative; flex: 1; overflow: hidden; background: #000; touch-action: none; cursor: grab; outline: none; }
+.viewport.dragging { cursor: grabbing; }
+.stage { position: absolute; left: 0; top: 0; transform-origin: 0 0; isolation: isolate; background: #000; }
+.stage img, .stage video, .stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; image-rendering: pixelated; user-select: none; -webkit-user-drag: none; pointer-events: none; }
+.stage video { object-fit: fill; }
+/* The video decoders behind the canvases: kept in the page (iOS decodes only
+   what is laid out) but out of sight. */
+.decoders { position: fixed; left: 0; top: 0; width: 1px; height: 1px; overflow: hidden; opacity: 0; pointer-events: none; }
+.decoders video { width: 1px; height: 1px; }
+.codec-note { position: absolute; inset: 40px 16px auto; z-index: 2; margin: 0; padding: 10px 12px; border-radius: var(--sc-radius); background: #3a2a10; color: #ffd9a0; font-size: 13px; line-height: 1.4; }
+.home { position: absolute; right: 10px; top: 10px; }
+.readout { position: absolute; left: 10px; bottom: 10px; padding: 4px 8px; border-radius: var(--sc-radius); background: #0b1016cc; color: #cfd9e1; font: 11px ui-monospace, monospace; pointer-events: none; }
+.dims { display: flex; flex-direction: column; gap: 4px; padding: 6px 10px; border-top: 1px solid var(--sc-line); background: var(--sc-surface); }
+@media (max-width: 720px) {
+  main { grid-template-columns: 1fr; }
+  .dock { position: fixed; inset: auto 0 0 0; max-height: 60vh; z-index: 5; border-top: 1px solid var(--sc-line); box-shadow: var(--sc-shadow); }
+  .dock[hidden] { display: none; }
+  #layers-toggle { display: inline-flex; }
+  .bar { padding: 8px 16px; gap: 8px; }
+}
+
+/* viewer-touch-spacing-v1: keep controls clear of the iPhone home-gesture zone. */
+@media (pointer: coarse), (max-width: 720px) {
+  :root { --viewer-bottom-gap: max(32px, env(safe-area-inset-bottom, 0px)); }
+  body { height: 100vh; height: 100dvh; padding-bottom: var(--viewer-bottom-gap); }
+  .bar, .dims { flex-shrink: 0; }
+  .dock { bottom: var(--viewer-bottom-gap); }
+}
+
+/* viewer-layer-arrangement-v2 */
+.layer-arrangement { display:flex; flex-direction:column; gap:8px; padding:12px; border-bottom:1px solid var(--sc-line); }
+.layer-arrangement > strong { font-size:12px; }
+.layer-arrangement label, .layer-arrangement p { margin:0; font-size:11px; color:var(--sc-muted); }
+.layer-arrangement select, .layer-arrangement input[type=number] { min-width:0; min-height:36px; max-width:100%; padding:5px 8px; border:1px solid var(--sc-line); border-radius:var(--sc-radius); background:var(--sc-surface-2); color:var(--sc-ink); font:inherit; }
+.layer-arrangement button { min-height:36px; padding:6px 8px; border:1px solid var(--sc-line); border-radius:var(--sc-radius); background:var(--sc-surface-2); color:var(--sc-ink); cursor:pointer; font:inherit; }
+.layer-arrangement button:disabled { opacity:.4; cursor:default; }
+.layer-order-buttons { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin:0; }
+.layer-rank-row { display:flex; align-items:center; gap:8px; }
+#layer-rank { width:64px; }
+.thickness-row { display:flex; align-items:center; gap:8px; margin:6px 0; }
+.thickness-row input[type=range] { flex:1; min-width:0; }
+#layer-thickness-number { width:64px; flex:0 0 64px; }
+#thickness-controls[hidden] { display:none; }
+#layer-style-reset, #layer-thickness-reset { font-size:11px; }
+@media (pointer:coarse), (max-width:720px) {
+  .layer-arrangement button, .layer-arrangement select, .layer-arrangement input { min-height:44px; }
+}
+
+/* colour bar (website addition) */
+.colorbar { position: absolute; right: 10px; bottom: 10px; padding: 6px 8px; border-radius: var(--sc-radius); background: #0b1016cc; color: #cfd9e1; font: 11px ui-monospace, monospace; pointer-events: none; }
+.colorbar .cb-name { display: block; margin-bottom: 5px; }
+.colorbar .cb-body { display: flex; gap: 6px; height: 120px; }
+.colorbar .cb-ramp { width: 12px; border: 1px solid #cfd9e166; }
+.colorbar .cb-ticks { display: flex; flex-direction: column; justify-content: space-between; }
+
+/* data-set switch (website addition) */
+.datasets { display: flex; flex: none; border: 1px solid var(--sc-line); border-radius: var(--sc-radius); overflow: hidden; font-size: 12px; }
+.datasets[hidden] { display: none; }
+.datasets a { padding: 4px 10px; color: inherit; text-decoration: none; white-space: nowrap; }
+.datasets a + a { border-left: 1px solid var(--sc-line); }
+.datasets a:hover { background: var(--sc-surface-2); }
+.datasets a[aria-current] { background: var(--sc-accent); color: #fff; }
